@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import Persons from './components/Persons'
+import PersonList from './components/PersonList'
+import Notification from './components/Notification'
+import ErrorMessage from './components/ErrorMessage'
 
 
 const App = () => {
@@ -10,14 +12,16 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ newName, setNewName ] = useState('')
   const [ filter, setFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
 
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
   const handleFilterChange = (event) => setFilter(event.target.value.toLowerCase())
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then(response => {
         setPersons(response.data)
       })
@@ -26,6 +30,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message = {notification}/>
+      <ErrorMessage message = {errorMessage}/>
       <Filter 
         handleFilterChange = {handleFilterChange}
       />
@@ -36,11 +42,15 @@ const App = () => {
         persons = {persons} setPersons = {setPersons}
         newName = {newName} setNewName = {setNewName}
         newNumber = {newNumber} setNewNumber = {setNewNumber}
+        setNotification = {setNotification} 
       />
       <h2>Numbers</h2>
-      <Persons
+      <PersonList
         filter = {filter}
         persons = {persons}
+        setPersons = {setPersons}
+        setNotification = {setNotification}
+        setErrorMessage = {setErrorMessage}
       />
     </div>
   )

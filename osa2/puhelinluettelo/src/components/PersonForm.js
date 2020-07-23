@@ -1,9 +1,11 @@
 import React from 'react'
 import AddPerson from './AddPerson'
 
-const PersonForm = ({ handleNameChange, handleNumberChange, newNumber, newName, setNewName, setNewNumber, persons, setPersons}) =>{
+const PersonForm = ({ handleNameChange, handleNumberChange, newNumber, newName,
+   setNewName, setNewNumber, persons, setPersons, setNotification}) =>{
     return(
-    <form onSubmit={(event) => {event.preventDefault(); AddPerson({persons, newName, newNumber, setNewName, setNewNumber,setPersons})}}>
+    <form onSubmit={(event) => {event.preventDefault(); AddPerson({persons, newName, newNumber, setNewName,
+     setNewNumber, setPersons, setNotification})}}>
       <div>
         name:<input
           value={newName} 

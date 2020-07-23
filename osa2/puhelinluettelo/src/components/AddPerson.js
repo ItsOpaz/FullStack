@@ -1,17 +1,51 @@
-const AddPerson = ({persons, newName, newNumber, setNewName, setNewNumber,setPersons}) => {
+import personService from '../services/persons'
+
+const AddPerson = ({persons, newName, newNumber, setNewName, setNewNumber,setPersons, setNotification}) => {
   const nameCheck = persons.filter(function(person){
       return person.name === newName
     })
-    if (nameCheck.length === 0){
+    if (nameCheck.length === 0 && newName !== ''){
       const personObject = {
         name: newName, number: newNumber
       }
-    
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+      personService
+        .create(personObject)
+        .then(() => {
+          setNotification(
+            `Added '${personObject.name}'`
+          )
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+          setPersons(persons.concat(personObject))
+          setNewName('')
+          setNewNumber('')
+
+      })
+      
+    }else if(nameCheck.length !== 0 && newName !== ''){
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        const person = persons.find(n=>n.name === newName)
+        const changedUnit = {...person, number: newNumber}
+        personService
+          .update(person.id, changedUnit)
+          .then(()=>{
+            setNotification(
+              `Updated '${changedUnit.name}'`
+            )
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
+            personService
+            .getAll()
+            .then(response => {
+            setPersons(response.data)
+          })
+      }, [])
+
+      }
     }else{
-      window.alert(`${newName} is already added to phonebook`);
+      window.alert('name is empty')
     }
 }
 
