@@ -42,7 +42,7 @@ const App = () => {
         persons = {persons} setPersons = {setPersons}
         newName = {newName} setNewName = {setNewName}
         newNumber = {newNumber} setNewNumber = {setNewNumber}
-        setNotification = {setNotification} 
+        setNotification = {setNotification} setErrorMessage = {setErrorMessage}
       />
       <h2>Numbers</h2>
       <PersonList

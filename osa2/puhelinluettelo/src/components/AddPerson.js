@@ -1,6 +1,6 @@
 import personService from '../services/persons'
 
-const AddPerson = ({persons, newName, newNumber, setNewName, setNewNumber,setPersons, setNotification}) => {
+const AddPerson = ({persons, newName, newNumber, setNewName, setNewNumber,setPersons, setNotification, setErrorMessage}) => { 
   const nameCheck = persons.filter(function(person){
       return person.name === newName
     })
@@ -20,8 +20,12 @@ const AddPerson = ({persons, newName, newNumber, setNewName, setNewNumber,setPer
           setPersons(persons.concat(personObject))
           setNewName('')
           setNewNumber('')
-
-      })
+        })
+        .catch(error => {
+          setNotification(null)
+          setErrorMessage(error.response.data.error)
+          setTimeout(() => {setErrorMessage(null)}, 4000)
+        })
       
     }else if(nameCheck.length !== 0 && newName !== ''){
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
