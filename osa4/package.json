@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --verbose",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "lint": "eslint ."
   },
   "author": "Olli Pettersson",
   "license": "ISC",
@@ -18,6 +19,11 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^7.5.0",
+    "jest": "^26.2.2",
     "nodemon": "^2.0.4"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
