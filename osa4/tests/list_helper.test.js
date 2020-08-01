@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 const listHelper = require('../utils/list_helper')
 
 const empty = []
