@@ -1,44 +1,37 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
-blogsRouter.get('/', (request, response) => {
-  Blog.find({}).then(blogs => {
-    response.json(blogs.map(blog => blog.toJSON()))
-  })
+blogsRouter.get('/', async (request, response) => {
+  const blogs = await Blog.find({}).populate('user', {username: 1, name: 1})
+  response.json(blogs.map(blog => blog.toJSON()))
 })
 
-blogsRouter.get('/:id', (request, response, next) => {
-  Blog.findById(request.params.id)
-    .then(blog => {
-      if (blog) {
-        response.json(blog.toJSON())
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => next(error))
+blogsRouter.get('/:id', async (request, response) => {
+  const result = await Blog.findById(request.params.id).populate('user', {username: 1, name: 1})
+  response.json(result.toJSON())
 })
 
-blogsRouter.post('/', (request, response, next) => {
+blogsRouter.post('/', async (request, response) => {
   const body = request.body
+  const user = await User.findById(body.user)
   if (typeof body.likes === 'undefined'){
     body.likes = 0
   }
   const blog = new Blog({
+    url: body.url,
     title: body.title,
     author: body.author,
-    url: body.url,
+    user: user._id,
     likes: body.likes
   })
   if (body.likes === null){
     blog.likes = 0
   }
-
-  blog.save()
-    .then(savedblog => {
-      response.json(savedblog.toJSON())
-    })
-    .catch(error => next(error))
+  const savedBlog = await blog.save()
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
+  response.json(savedBlog.toJSON())
 })
 
 blogsRouter.delete('/:id', async (request, response) => {

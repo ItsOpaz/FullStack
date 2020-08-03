@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs 
+Content-Type: application/json
+
+{
+ "url": "www.näihinkuviin.fi",
+  "title": "täältä tähän -blogi",
+  "author": "Michael Kosol",
+  "user": "5f286c4e4d5b640c3c0bce39",
+  "likes": "22"
+}
