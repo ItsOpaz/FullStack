@@ -8,13 +8,7 @@ const h = require('./test_helper')
 
 const api = supertest(app)
 
-beforeEach(async () => {
-  await User.deleteMany({})
-  const userObjects = (h.users
-      .map(user => new User(user)))
-  const promiseArray = userObjects.map(user => user.save())
-  await Promise.all(promiseArray)
-})
+
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -22,6 +16,7 @@ beforeEach(async () => {
       .map(blog => new Blog(blog)))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
+
 })
 
 describe('blog tests', () => {
@@ -41,33 +36,52 @@ describe('blog tests', () => {
   
   test('adding to db', async () => {
     const control = await h.blogsInDb()
+    const loggedUser = await api
+      .post('/api/login')
+      .send(h.controlUser)
+    const token = 'bearer ' + loggedUser.body.token
     await api
       .post('/api/blogs')
+      .set('Authorization', token)
       .send(h.dummyBlog)
       .expect('Content-Type', /application\/json/)
     const check = await h.blogsInDb()
-
     expect(check).toHaveLength(control.length + 1)
   })
   
   test('empty likes equals 0', async() => {
+    const loggedUser = await api
+      .post('/api/login')
+      .send(h.controlUser)
+  const token = 'bearer ' + loggedUser.body.token
     await api
       .post('/api/blogs')
+      .set('Authorization', token)
       .send(h.emptyLikes)
     const check = await h.blogsInDb()
     expect(check[check.length-1].likes).toBe(0)
   })
   
   test('empty title results in bad request', async() => {
+    const loggedUser = await api
+      .post('/api/login')
+      .send(h.controlUser)
+    const token = 'bearer ' + loggedUser.body.token
     await api
       .post('/api/blogs')
+      .set('Authorization', token)
       .send(h.emptyTitle)
       .expect(400)
   })
   
   test('empty URL results in bad request', async() => {
+    const loggedUser = await api
+      .post('/api/login')
+      .send(h.controlUser)
+    const token = 'bearer ' + loggedUser.body.token
     await api
       .post('/api/blogs')
+      .set('Authorization', token)
       .send(h.emptyURL)
       .expect(400)
   })
@@ -84,12 +98,28 @@ describe('blog tests', () => {
   })
   
   test('deleting returns code 204 and one blog is removed', async() => {
+    const loggedUser = await api
+      .post('/api/login')
+      .send(h.controlUser)
+    const token = 'bearer ' + loggedUser.body.token
     const control = await h.blogsInDb()
+    console.log(token)
     await api
-      .delete('/api/blogs/5a422a851b54a676234d17f7')
+      .delete('/api/blogs/5a422aa71b54a676234d17f8')
+      .set('Authorization', token)
       .expect(204)
     const check = await h.blogsInDb()
     expect(check).toHaveLength(control.length - 1)
+  })
+
+  test('missing token results in 401', async() => {
+    const control = await h.blogsInDb()
+    await api
+      .post('/api/blogs')
+      .send(h.dummyBlog)
+      .expect(401)
+    const check = await h.blogsInDb()
+    expect(check).toHaveLength(control.length)
   })
 })
 
@@ -108,6 +138,7 @@ describe('user tests', () => {
       .expect('Content-Type', /application\/json/)
     const check = await h.usersInDb()
     expect(check).toHaveLength(control.length + 1)
+    await User.remove({name:'test2'})
   })
   test('username is already used', async () => {
     const control = await h.usersInDb()
