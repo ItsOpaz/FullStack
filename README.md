@@ -1,3 +1,3 @@
 # FullStack
-Helsingin yliopiston Fullstack-kurssin tehtävät
+Helsingin yliopiston Fullstack-kurssin tehtävät,
 kurssi: https://fullstackopen.com/
