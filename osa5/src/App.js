@@ -20,8 +20,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )
-      
+    )  
   }, [])
   
   useEffect(() => {
@@ -77,6 +76,18 @@ const App = () => {
       blogFormRef.current.toggleVisibility()
   }
 
+  const addLike = async (blog) => {
+    blog.likes += 1
+    await blogService.update(blog.id, blog)
+    setBlogs(blogs.map(x => x.id === blog.id ? {...x, likes: blog.likes} : x))
+  }
+
+  const deleteBlog = async (blog) => {
+    if(window.confirm(`Remove blog ${blog.name} by ${blog.author}`))
+    await blogService.remove(blog.id)
+    setBlogs(blogs.filter(x => x.id !== blog.id))
+  }
+
   if (user === null) {
     return (
       <div>
@@ -110,6 +121,9 @@ const App = () => {
       </Togglable>
         <BlogList
           blogs = {blogs}
+          addLike = {addLike}
+          deleteBlog = {deleteBlog}
+          user = {user}
         />
 
     </div>
