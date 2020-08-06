@@ -1,34 +1,34 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import '../App.css'
 
-const Blog = ({ blog , addLike, deleteBlog, user}) => {
-  const [full, setFull] = useState(false)
+const Blog = ({ blog , addLike, deleteBlog, user }) => {
+  const [status, setStatus] = useState(false)
 
-  const toggleFull = () => setFull(!full)
+  const toggleStatus = () => setStatus(!status)
 
   return(
-    full
+    status
       ?
       <div className = "Blog">
-        {blog.title} {blog.author} 
-        <button onClick={()=> toggleFull()}>hide</button><br/>
+        {blog.title} {blog.author}
+        <button onClick={() => toggleStatus()}>hide</button><br/>
         {blog.url}<br/>
-        likes {blog.likes} 
-        <button onClick={()=> addLike(blog)}>like</button><br/>
+        likes {blog.likes}
+        <button onClick={() => addLike(blog)}>like</button><br/>
         {blog.user.username}<br/>
         {user.username === blog.user.username ?
-        <button style = {{color: 'white',backgroundColor: 'blue'}} 
-        onClick={()=> deleteBlog(blog)}>
+          <button style = {{ color: 'white',backgroundColor: 'blue' }}
+            onClick={() => deleteBlog(blog)}>
         remove
-        </button> :
-        null}
+          </button> :
+          null}
       </div>
       :
       <div className = "Blog">
-      {blog.title} {blog.author} 
-      <button onClick={()=> toggleFull()}>show</button>
-    </div>
-    )
+        {blog.title} {blog.author}
+        <button onClick={() => toggleStatus()}>show</button>
+      </div>
+  )
 
 }
 
