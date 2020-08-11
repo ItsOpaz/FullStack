@@ -1,30 +1,31 @@
+var timeoutHandle
+
 const notificationReducer = (state = null, action) => {
   switch (action.type) {
     case 'NOTIFICATION':
-      return action.content
-    case 'EMPTY':
-      return null
+      if (action.content){
+        return action.content
+      }else{
+        return null
+      }
     default:
       return state
   }
 }
 
 export const setNotification = (content, time) => {
+  clearTimeout(timeoutHandle)
   return async dispatch => {
     dispatch({
       type: 'NOTIFICATION',
       content
     })
-    setTimeout(() => {
-      dispatch(clearNotification())
+    timeoutHandle = setTimeout(() => {
+      dispatch({
+        type: 'NOTIFICATION',
+      })
       
     }, time * 1000)
-  }
-}
-
-const clearNotification = () => {
-  return {
-    type: 'EMPTY'
   }
 }
 
