@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs 
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QyIiwiaWQiOiI1ZjI4NmM0NTRkNWI2NDBjM2MwYmNlMzgiLCJpYXQiOjE1OTY1NDM3MTd9.IOOOLJRjFSRJZD__NQpgA4AcDXb7QIRxwVpUbmFaHlA
+
+{
+ "url": "www.toimii.fi",
+  "title": "ei siittä sen",
+  "author": "Michael Kosol",
+  "likes": "22"
+}
