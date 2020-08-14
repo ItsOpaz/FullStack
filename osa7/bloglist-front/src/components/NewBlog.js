@@ -1,52 +1,39 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useField } from '../hooks'
+import { Form, Button } from 'react-bootstrap'
 
 const NewBlog = (props) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const title = useField('text')
+  const author = useField('text')
+  const url = useField('text')
 
   const handleNewBlog = (event) => {
     event.preventDefault()
-
     props.newBlog({
-      title, author, url
+      title: title.value, author: author.value, url: url.value
     })
-
-    setTitle('')
-    setAuthor('')
-    setUrl('')
   }
 
   return (
     <div>
       <h2>create new</h2>
-      <form onSubmit={handleNewBlog}>
-        <div>
-          author
-          <input
-            id='author'
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
+      <Form onSubmit={handleNewBlog}>
+        <div className="form-row align-items-center">
+          <div className="col-auto">
+            <div position='center'>
+              <Form.Group>
+            author:
+                <Form.Control { ...author }/>
+            title:
+                <Form.Control { ...title }/>
+            url:
+                <Form.Control { ...url }/><br/>
+                <Button variant="primary" type="submit">create</Button>
+              </Form.Group>
+            </div>
+          </div>
         </div>
-        <div>
-          title
-          <input
-            id='title'
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          url
-          <input
-            id='url'
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button id="create">create</button>
-      </form>
+      </Form>
     </div>
   )
 }

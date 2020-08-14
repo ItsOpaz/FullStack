@@ -31,3 +31,21 @@ code {
   padding: 10px;
   margin-bottom: 10px;
 }
+
+.row1 .col-xs-2{
+  display:inline-block;
+  vertical-align: middle;
+  float: none;
+}
+
+.login {
+  color: rgb(0, 255, 0);
+  font-size: 32px;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.users {
+  color: rgb(10, 85, 0);
+  font-size: 24px;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
